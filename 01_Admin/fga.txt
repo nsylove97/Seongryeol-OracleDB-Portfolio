@@ -1,0 +1,403 @@
+<Policy 삭제>
+SYS@orcl> exec dbms_fga.drop_policy(object_schema =>'scott',object_name =>'emp',policy_name => 'emp_fga')
+
+PL/SQL procedure successfully completed.
+
+<Policy 생성>
+SYS@orcl> select * from dba_audit_policies;   -- Policy 확인
+
+SYS@orcl> begin
+  2   dbms_fga.add_policy(
+  3   object_schema => 'scott',
+  4   object_name => 'emp',
+  5   policy_name => 'emp_fga',
+  6   audit_condition => 'deptno = 20',
+  7   audit_column => 'sal,comm',
+  8   audit_column_opts => dbms_fga.all_columns,
+  9   statement_types => 'select,insert,update,delete',
+ 10   enable => true);
+ 11 end;
+
+
+PL/SQL procedure successfully completed.
+
+SYS@orcl> select * from dba_audit_policies;
+
+<SQL 수행>
+= SCOTT
+SCOTT@orcl> select * from emp where deptno=20 ;
+SCOTT@orcl> select * from emp where empno=7788;
+SCOTT@orcl> select empno,sal,comm from emp;
+SCOTT@orcl> select sal from emp where deptno=20;
+SCOTT@orcl> select empno,sal from emp 
+  2  where deptno=20 and comm is not null;
+
+SCOTT@orcl> insert into emp
+  2  (empno, ename, sal, comm, deptno)
+  3 values(100,'Tom',10000,0.1,20)
+SCOTT@orcl> /
+
+1 row created.
+
+SCOTT@orcl> insert into emp
+  2  (empno, ename, sal, comm, deptno)
+  3* values(101,'Tao',20000,0.2,30)
+
+SCOTT@orcl> /
+
+1 row created.
+
+SCOTT@orcl> rollback;
+
+Rollback complete.
+     
+
+SCOTT@orcl> update emp
+  2  set sal = 5000, comm =0.3 
+  3  where empno=7788;
+
+1 row updated.
+
+SCOTT@orcl>  update emp
+  2  set sal=3000 ,comm = 0.2
+  3 where empno=7839;
+
+1 rows updated.
+
+SCOTT@orcl> delete from emp where empno=7788; 
+
+1 row deleted.
+
+SCOTT@orcl> rollback;
+
+Rollback complete.
+
+
+== SYS
+SYS@orcl> select POLICY_NAME,SQL_TEXT  from dba_fga_audit_trail;
+
+SYS@orcl> select SESSIONID,POLICYNAME,SQLTEXT
+  2  from fga_log$ ;
+
+SYS@orcl> truncate table fga_log$;
+
+Table truncated.
+
+SYS@orcl> exec dbms_fga.disable_policy(object_schema =>'scott',object_name =>'emp', policy_name =>'emp_fga');
+
+
+SYS@orcl> select POLICY_NAME,OBJECT_NAME,ENABLED 
+  2  from dba_audit_policies;
+
+POLICY_NAME                    OBJECT_NAME                    ENA
+------------------------------ ------------------------------ ---
+EMP_FGA                        EMP                            NO
+
+
+== Scott
+SCOTT@orcl> select count(*) from emp;
+위에 SQL 수행... 재수행
+
+== SYS
+SYS@orcl> select sessionid, policyname, sqltext from fga_log$;
+
+no rows selected
+
+SYS@orcl> exec dbms_fga.enable_policy(object_schema =>'scott',object_name =>'emp', policy_name =>'emp_fga');
+
+PL/SQL procedure successfully completed.
+
+== Scott
+SCOTT@orcl> select count(*) from emp;
+위에 SQL 수행... 재수행
+
+== SYS
+SYS@orcl> select sessionid, policyname, sqltext from fga_log$;
+
+ SESSIONID POLICYNAME
+---------- ------------------------------
+SQLTEXT
+--------------------------------------------------------------------------------
+    720023 EMP_FGA
+
+<AUD$, FGA_LOG$ 의 Tablespace 변경>
+SYS@orcl> select table_name, tablespace_name
+  2  from dba_tables
+  3  where table_name in ('AUD$','FGA_LOG$');
+
+TABLE_NAME                     TABLESPACE_NAME
+------------------------------ ------------------------------
+AUD$                           SYSTEM
+FGA_LOG$                       SYSTEM
+
+SYS@orcl> create tablespace adt_tbs
+  2  datafile '/u02/oradata/orcl/audit_tbs01.dbf' size 50m
+  3  autoextend on next 2m maxsize unlimited
+  4  extent management local uniform size 1m
+  5  segment space management auto;
+
+Tablespace created.
+
+SYS@orcl> desc dbms_audit_mgmt   
+
+SYS@orcl> exec dbms_audit_mgmt.SET_AUDIT_TRAIL_LOCATION(AUDIT_TRAIL_TYPE => dbms_audit_mgmt.audit_trail_aud_std, AUDIT_TRAIL_LOCATION_VALUE => 'adt_tbs');
+
+PL/SQL procedure successfully completed.
+
+SYS@orcl> select table_name, tablespace_name
+  2  from dba_tables
+  3  where table_name in ('AUD$','FGA_LOG$');
+
+TABLE_NAME                     TABLESPACE_NAME
+------------------------------ ------------------------------
+AUD$                           ADT_TBS
+FGA_LOG$                       SYSTEM
+
+SYS@orcl> exec dbms_audit_mgmt.SET_AUDIT_TRAIL_LOCATION(AUDIT_TRAIL_TYPE => dbms_audit_mgmt.audit_trail_fga_std,AUDIT_TRAIL_LOCATION_VALUE => 'adt_tbs');
+
+PL/SQL procedure successfully completed.
+
+SYS@orcl> select table_name, tablespace_name
+  2  from dba_tables
+  3  where table_name in ('AUD$','FGA_LOG$');
+
+TABLE_NAME                     TABLESPACE_NAME
+------------------------------ ------------------------------
+FGA_LOG$                       ADT_TBS
+AUD$                           ADT_TBS
+
+SYS@orcl> exec dbms_fga.drop_policy(object_schema =>'scott',object_name =>'emp', policy_name =>'emp_fga');
+
+
+====================================================================
+SYS@orcl> create table scott.fga_emp_log(
+  2  object_schema varchar2(25),
+  3  object_name   varchar2(25),
+  4  policy_name   varchar2(25),
+  5  username      varchar2(25),
+  6  sql_text      varchar2(100),
+  7  sql_bind      varchar2(100),
+  8  day           timestamp);
+
+Table created.
+
+SYS@orcl>  create or replace procedure scott.fga_trail_proc(
+  2       object_schema in  varchar2,
+  3       object_name   in  varchar2,
+  4       policy_name   in  varchar2)
+  5  is
+  6  pragma autonomous_transaction;
+  7  begin
+  8   insert into scott.fga_emp_log
+  9   values(object_schema, object_name,policy_name,
+ 10          sys_context('userenv','session_user'),
+ 11          sys_context('userenv','current_sql'),
+ 12          sys_context('userenv','current_bind'),localtimestamp);
+ 13   commit;
+ 14  end fga_trail_proc;
+ 15  /
+
+Procedure created.
+
+SYS@orcl>  begin
+  2       dbms_fga.add_policy(
+  3       object_schema => 'scott',
+  4       object_name => 'emp',
+  5       policy_name => 'emp_fga_prg',
+  6       audit_condition => 'deptno = 20',
+  7       audit_column => 'sal,comm',
+  8       audit_column_opts => dbms_fga.all_columns,
+  9       statement_types => 'select,insert,update,delete',
+ 10       handler_schema => 'scott',
+ 11       handler_module => 'fga_trail_proc',
+ 12      enable => true);
+ 13    end;
+ 14 /
+
+PL/SQL procedure successfully completed.
+
+
+SYS@orcl> select OBJECT_SCHEMA,OBJECT_NAME,POLICY_NAME,PF_FUNCTION
+  2  from dba_audit_policies;
+
+OBJECT_SCHEMA                  OBJECT_NAME
+------------------------------ ------------------------------
+POLICY_NAME                    PF_FUNCTION
+------------------------------ ------------------------------
+SCOTT                          EMP
+EMP_FGA_PRG                    FGA_TRAIL_PROC
+
+== SCOTT
+SCOTT@orcl> select * from emp where deptno=20 ;
+SCOTT@orcl> select * from emp where empno=7788;
+SCOTT@orcl> select empno,sal,comm from emp;
+SCOTT@orcl> select sal from emp where deptno=20;
+SCOTT@orcl> select empno,sal from emp
+  2  where deptno=20 and comm is not null;
+
+SCOTT@orcl> insert into emp
+  2  (empno, ename, sal, comm, deptno)
+  3 values(100,'Tom',10000,0.1,20)
+SCOTT@orcl> /
+
+1 row created.
+
+SCOTT@orcl> insert into emp
+  2  (empno, ename, sal, comm, deptno)
+  3* values(101,'Tao',20000,0.2,30)
+
+SCOTT@orcl> /
+
+1 row created.
+
+
+==SYS
+SYS@orcl> select POLICY_NAME,SQL_TEXT  from dba_fga_audit_trail;
+
+POLICY_NAME            SQL_TEXT
+----------------------------------------------------------------
+EMP_FGA        select count(*) from emp
+
+EMP_FGA        select count(*) from emp
+
+EMP_FGA_PRG    select * from emp where deptno=20
+
+EMP_FGA_PRG    select * from emp where empno=7788
+
+EMP_FGA_PRG    select empno,sal,comm from emp
+
+EMP_FGA_PRG    insert into emp
+(empno, ename, sal, comm, deptno)
+values(100,'Tom',10000,0.1,20)
+
+6 rows selected.
+
+SYS@orcl> select * from scott.fga_emp_log;
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+SCOTT                     EMP                       EMP_FGA_PRG
+SCOTT
+select * from emp where deptno=20
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+
+09-APR-25 12.06.52.028065 AM
+
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+SCOTT                     EMP                       EMP_FGA_PRG
+SCOTT
+select * from emp where empno=7788
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+
+09-APR-25 12.07.01.238563 AM
+
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+SCOTT                     EMP                       EMP_FGA_PRG
+SCOTT
+select empno,sal,comm from emp
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+
+09-APR-25 12.07.09.656839 AM
+
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+SCOTT                     EMP                       EMP_FGA_PRG
+SCOTT
+insert into emp
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+(empno, ename, sal, comm, deptno)
+values(100,'Tom',10000,0.1,20)
+
+
+OBJECT_SCHEMA             OBJECT_NAME               POLICY_NAME
+------------------------- ------------------------- -------------------------
+USERNAME
+-------------------------
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_BIND
+--------------------------------------------------------------------------------
+DAY
+---------------------------------------------------------------------------
+09-APR-25 12.08.01.638866 AM
+
+
+SYS@orcl> 
+

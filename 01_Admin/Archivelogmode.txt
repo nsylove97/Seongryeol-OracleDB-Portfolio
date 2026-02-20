@@ -1,0 +1,240 @@
+[oracle@oel5v8 ~]$ sqlplus / as sysdba
+
+SYS@orcl> 
+SYS@orcl> startup
+ORACLE instance started.
+
+Total System Global Area 1653518336 bytes
+Fixed Size                  2213896 bytes
+Variable Size            1409288184 bytes
+Database Buffers          234881024 bytes
+Redo Buffers                7135232 bytes
+Database mounted.
+Database opened.
+
+- Archive mode 확인
+SYS@orcl> archive log list
+Database log mode              No Archive Mode
+Automatic archival             Disabled
+Archive destination            USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     373
+Current log sequence           375
+
+SYS@orcl> show parameter db_recovery
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest                string      /u02/fra
+db_recovery_file_dest_size           big integer 3882M
+
+- Arch process 확인
+SYS@orcl> !ps -ef|grep orcl   
+oracle    5488     1  0 08:51 ?        00:00:00 ora_pmon_orcl
+oracle    5492     1  0 08:51 ?        00:00:06 ora_vktm_orcl
+oracle    5498     1  0 08:51 ?        00:00:00 ora_gen0_orcl
+oracle    5502     1  0 08:51 ?        00:00:00 ora_diag_orcl
+oracle    5506     1  0 08:51 ?        00:00:00 ora_dbrm_orcl
+oracle    5510     1  0 08:51 ?        00:00:00 ora_psp0_orcl
+oracle    5514     1  0 08:51 ?        00:00:01 ora_dia0_orcl
+oracle    5518     1  0 08:51 ?        00:00:00 ora_mman_orcl
+oracle    5522     1  0 08:51 ?        00:00:00 ora_dbw0_orcl
+oracle    5526     1  0 08:51 ?        00:00:00 ora_lgwr_orcl
+oracle    5530     1  0 08:51 ?        00:00:01 ora_ckpt_orcl
+oracle    5534     1  0 08:51 ?        00:00:00 ora_smon_orcl
+oracle    5538     1  0 08:51 ?        00:00:00 ora_reco_orcl
+oracle    5542     1  0 08:51 ?        00:00:00 ora_mmon_orcl
+oracle    5546     1  0 08:51 ?        00:00:04 ora_mmnl_orcl
+oracle    5550     1  0 08:51 ?        00:00:00 ora_d000_orcl
+oracle    5554     1  0 08:51 ?        00:00:00 ora_s000_orcl
+oracle    5582  5453  0 08:51 ?        00:00:00 oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq)))
+oracle    5592     1  0 08:51 ?        00:00:00 ora_qmnc_orcl
+oracle    5623     1  0 08:51 ?        00:00:00 ora_cjq0_orcl
+oracle    5661     1  0 08:51 ?        00:00:00 ora_q000_orcl
+oracle    5665     1  0 08:51 ?        00:00:00 ora_q001_orcl
+oracle    5780     1  0 08:56 ?        00:00:00 ora_smco_orcl
+oracle    9312     1  0 09:56 ?        00:00:00 ora_w000_orcl
+oracle    9446  5453  0 10:01 pts/1    00:00:00 /bin/bash -c ps -ef|grep orcl
+oracle    9448  9446  0 10:01 pts/1    00:00:00 grep orcl
+
+- Archive destination 위한  Directory 생성(2개)
+SYS@orcl> show parameter log_arch
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_dest_1                   string
+log_archive_dest_2                   string
+log_archive_format                   string      %t_%s_%r.dbf
+log_archive_max_processes            integer     4
+log_archive_min_succeed_dest         integer     1
+log_archive_start                    boolean     FALSE
+
+SYS@orcl> !mkdir -p /home/oracle/arch1
+
+SYS@orcl> !mkdir -p /home/oracle/arch2
+
+SYS@orcl> !ls
+afiedt.buf  awrrpt_1_234_244.txt  ddir     noarch_backup   sql_lab
+arch1       awrrpt_1_238_241.txt  Desktop  oradiag_oracle
+arch2       batch_sqlplus.sh      emp_dir  sdir
+
+- log archive dest(2) , log_archive_format 설정
+SYS@orcl> alter system set
+  2  log_archive_dest_1='location=/home/oracle/arch1' scope=spfile;
+
+System altered.
+
+SYS@orcl> alter system set
+  2  log_archive_dest_2='location=/home/oracle/arch2' scope=spfile;
+
+System altered.
+
+SYS@orcl> alter system set
+  2  log_archive_format='%T_%R_%S.arc' scope=spfile;
+
+System altered.
+
+SYS@orcl> shu immediate
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@orcl> startup mount
+ORACLE instance started.
+
+Total System Global Area 1653518336 bytes
+Fixed Size                  2213896 bytes
+Variable Size            1409288184 bytes
+Database Buffers          234881024 bytes
+Redo Buffers                7135232 bytes
+Database mounted.
+SYS@orcl> archive log list
+Database log mode              No Archive Mode
+Automatic archival             Disabled
+Archive destination            /home/oracle/arch2
+Oldest online log sequence     373
+Current log sequence           375
+
+- log mode 변경
+SYS@orcl> alter database archivelog;
+
+Database altered.
+
+SYS@orcl>  archive log list
+Database log mode              Archive Mode
+Automatic archival             Enabled
+Archive destination            /home/oracle/arch2
+Oldest online log sequence     373
+Next log sequence to archive   375
+Current log sequence           375
+
+SYS@orcl> alter database open;
+
+Database altered.
+
+SYS@orcl> !ps -ef|grep orcl
+
+oracle   10681     1  0 10:45 ?        00:00:00 ora_arc0_orcl
+oracle   10685     1  0 10:45 ?        00:00:00 ora_arc1_orcl
+oracle   10689     1  0 10:45 ?        00:00:00 ora_arc2_orcl
+oracle   10693     1  0 10:45 ?        00:00:00 ora_arc3_orcl
+
+
+SYS@orcl> show parameter log_archive_max
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+log_archive_max_processes            integer     4
+
+SYS@orcl> !ls -al /home/oracle/arch1  /home/oracle/arch2
+/home/oracle/arch1:
+total 12
+drwxr-xr-x  2 oracle oinstall 4096 Oct 14 10:33 .
+drwx------ 27 oracle oinstall 4096 Oct 14 10:33 ..
+
+/home/oracle/arch2:
+total 12
+drwxr-xr-x  2 oracle oinstall 4096 Oct 14 10:33 .
+drwx------ 27 oracle oinstall 4096 Oct 14 10:33 ..
+
+- archive file 생성
+SYS@orcl> alter system switch logfile;
+
+System altered.
+
+SYS@orcl> !ls -al /home/oracle/arch1  /home/oracle/arch2
+/home/oracle/arch1:
+total 6396
+drwxr-xr-x  2 oracle oinstall    4096 Oct 14 10:48 .
+drwx------ 27 oracle oinstall    4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall 6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+
+/home/oracle/arch2:
+total 6396
+drwxr-xr-x  2 oracle oinstall    4096 Oct 14 10:48 .
+drwx------ 27 oracle oinstall    4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall 6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+
+SYS@orcl> alter system switch logfile;
+
+System altered.
+
+SYS@orcl> !ls -al /home/oracle/arch1  /home/oracle/arch2
+/home/oracle/arch1:
+total 6400
+drwxr-xr-x  2 oracle oinstall    4096 Oct 14 10:49 .
+drwx------ 27 oracle oinstall    4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall 6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+-rw-r-----  1 oracle oinstall    1024 Oct 14 10:49 0001_1210778020_0000000376.arc
+
+/home/oracle/arch2:
+total 6400
+drwxr-xr-x  2 oracle oinstall    4096 Oct 14 10:49 .
+drwx------ 27 oracle oinstall    4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall 6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+-rw-r-----  1 oracle oinstall    1024 Oct 14 10:49 0001_1210778020_0000000376.arc
+
+SYS@orcl> create table hr.usertobj tablespace users
+  2  as select * from dba_objects;
+
+Table created.
+
+SYS@orcl> insert into hr.usertobj select * from hr.usertobj;
+
+72559 rows created.
+
+SYS@orcl> /
+
+145118 rows created.
+
+SYS@orcl> /
+
+290236 rows created.
+
+SYS@orcl> !ls -al /home/oracle/arch1  /home/oracle/arch2
+/home/oracle/arch1:
+total 67160
+drwxr-xr-x  2 oracle oinstall     4096 Oct 14 10:54 .
+drwx------ 27 oracle oinstall     4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall  6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+-rw-r-----  1 oracle oinstall     1024 Oct 14 10:49 0001_1210778020_0000000376.arc
+-rw-r-----  1 oracle oinstall 10351616 Oct 14 10:53 0001_1210778020_0000000377.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:53 0001_1210778020_0000000378.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:54 0001_1210778020_0000000379.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:54 0001_1210778020_0000000380.arc
+-rw-r-----  1 oracle oinstall 10348032 Oct 14 10:54 0001_1210778020_0000000381.arc
+-rw-r-----  1 oracle oinstall 10348032 Oct 14 10:54 0001_1210778020_0000000382.arc
+
+/home/oracle/arch2:
+total 67160
+drwxr-xr-x  2 oracle oinstall     4096 Oct 14 10:54 .
+drwx------ 27 oracle oinstall     4096 Oct 14 10:33 ..
+-rw-r-----  1 oracle oinstall  6522880 Oct 14 10:48 0001_1210778020_0000000375.arc
+-rw-r-----  1 oracle oinstall     1024 Oct 14 10:49 0001_1210778020_0000000376.arc
+-rw-r-----  1 oracle oinstall 10351616 Oct 14 10:53 0001_1210778020_0000000377.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:53 0001_1210778020_0000000378.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:53 0001_1210778020_0000000379.arc
+-rw-r-----  1 oracle oinstall 10352128 Oct 14 10:54 0001_1210778020_0000000380.arc
+-rw-r-----  1 oracle oinstall 10348032 Oct 14 10:54 0001_1210778020_0000000381.arc
+-rw-r-----  1 oracle oinstall 10348032 Oct 14 10:54 0001_1210778020_0000000382.arc
+
+
+

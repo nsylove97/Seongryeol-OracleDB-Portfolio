@@ -1,0 +1,1026 @@
+SYS@orcl> desc dba_tablespaces
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                NOT NULL NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                               NOT NULL NUMBER
+ MAX_EXTENTS                                        NUMBER
+ MAX_SIZE                                           NUMBER
+ PCT_INCREASE                                       NUMBER
+ MIN_EXTLEN                                         NUMBER
+ STATUS                                             VARCHAR2(9)
+ CONTENTS                                           VARCHAR2(9)
+ LOGGING                                            VARCHAR2(9)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ EXTENT_MANAGEMENT                                  VARCHAR2(10)
+ ALLOCATION_TYPE                                    VARCHAR2(9)
+ PLUGGED_IN                                         VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                           VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                VARCHAR2(8)
+ RETENTION                                          VARCHAR2(11)
+ BIGFILE                                            VARCHAR2(3)
+ PREDICATE_EVALUATION                               VARCHAR2(7)
+ ENCRYPTED                                          VARCHAR2(3)
+ COMPRESS_FOR                                       VARCHAR2(12)
+
+SYS@orcl> select tablespace_name, status, logging, contents
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                STATUS    LOGGING   CONTENTS
+------------------------------ --------- --------- ---------
+SYSTEM                         ONLINE    LOGGING   PERMANENT
+SYSAUX                         ONLINE    LOGGING   PERMANENT
+UNDOTBS1                       ONLINE    LOGGING   UNDO
+TEMP                           ONLINE    NOLOGGING TEMPORARY
+USERS                          ONLINE    LOGGING   PERMANENT
+EXAMPLE                        ONLINE    NOLOGGING PERMANENT
+
+6 rows selected.
+
+SYS@orcl> desc dba_data_files
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME                                          VARCHAR2(513)
+ FILE_ID                                            NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ STATUS                                             VARCHAR2(9)
+ RELATIVE_FNO                                       NUMBER
+ AUTOEXTENSIBLE                                     VARCHAR2(3)
+ MAXBYTES                                           NUMBER
+ MAXBLOCKS                                          NUMBER
+ INCREMENT_BY                                       NUMBER
+ USER_BYTES                                         NUMBER
+ USER_BLOCKS                                        NUMBER
+ ONLINE_STATUS                                      VARCHAR2(7)
+
+SYS@orcl> select  FILE_ID,TABLESPACE_NAME,FILE_NAME,STATUS
+  2  from dba_data_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+STATUS
+---------
+         4 USERS
+/u02/oradata/orcl/users01.dbf
+AVAILABLE
+
+         3 UNDOTBS1
+/u02/oradata/orcl/undotbs01.dbf
+AVAILABLE
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+STATUS
+---------
+
+         2 SYSAUX
+/u02/oradata/orcl/sysaux01.dbf
+AVAILABLE
+
+         1 SYSTEM
+/u02/oradata/orcl/system01.dbf
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+STATUS
+---------
+AVAILABLE
+
+         5 EXAMPLE
+/u02/oradata/orcl/example01.dbf
+AVAILABLE
+
+
+SYS@orcl> select name from v$controlfile
+  2  union
+  3  select name from v$datafile
+  4  union
+  5  select member from v$logfile;
+
+NAME
+--------------------------------------------------------------------------------
+/u02/fra/orcl/control02.ctl
+/u02/oradata/orcl/control01.ctl
+/u02/oradata/orcl/example01.dbf
+/u02/oradata/orcl/redo01.log
+/u02/oradata/orcl/redo02.log
+/u02/oradata/orcl/redo03.log
+/u02/oradata/orcl/sysaux01.dbf
+/u02/oradata/orcl/system01.dbf
+/u02/oradata/orcl/undotbs01.dbf
+/u02/oradata/orcl/users01.dbf
+
+10 rows selected.
+
+SYS@orcl> desc v$datafile
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE#                                              NUMBER
+ CREATION_CHANGE#                                   NUMBER
+ CREATION_TIME                                      DATE
+ TS#                                                NUMBER
+ RFILE#                                             NUMBER
+ STATUS                                             VARCHAR2(7)
+ ENABLED                                            VARCHAR2(10)
+ CHECKPOINT_CHANGE#                                 NUMBER
+ CHECKPOINT_TIME                                    DATE
+ UNRECOVERABLE_CHANGE#                              NUMBER
+ UNRECOVERABLE_TIME                                 DATE
+ LAST_CHANGE#                                       NUMBER
+ LAST_TIME                                          DATE
+ OFFLINE_CHANGE#                                    NUMBER
+ ONLINE_CHANGE#                                     NUMBER
+ ONLINE_TIME                                        DATE
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ CREATE_BYTES                                       NUMBER
+ BLOCK_SIZE                                         NUMBER
+ NAME                                               VARCHAR2(513)
+ PLUGGED_IN                                         NUMBER
+ BLOCK1_OFFSET                                      NUMBER
+ AUX_NAME                                           VARCHAR2(513)
+ FIRST_NONLOGGED_SCN                                NUMBER
+ FIRST_NONLOGGED_TIME                               DATE
+ FOREIGN_DBID                                       NUMBER
+ FOREIGN_CREATION_CHANGE#                           NUMBER
+ FOREIGN_CREATION_TIME                              DATE
+ PLUGGED_READONLY                                   VARCHAR2(3)
+ PLUGIN_CHANGE#                                     NUMBER
+ PLUGIN_RESETLOGS_CHANGE#                           NUMBER
+ PLUGIN_RESETLOGS_TIME                              DATE
+
+SYS@orcl> desc v$tablespace
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TS#                                                NUMBER
+ NAME                                               VARCHAR2(30)
+ INCLUDED_IN_DATABASE_BACKUP                        VARCHAR2(3)
+ BIGFILE                                            VARCHAR2(3)
+ FLASHBACK_ON                                       VARCHAR2(3)
+ ENCRYPT_IN_BACKUP                                  VARCHAR2(3)
+
+SYS@orcl> desc dba_tablespaces
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                NOT NULL NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                               NOT NULL NUMBER
+ MAX_EXTENTS                                        NUMBER
+ MAX_SIZE                                           NUMBER
+ PCT_INCREASE                                       NUMBER
+ MIN_EXTLEN                                         NUMBER
+ STATUS                                             VARCHAR2(9)
+ CONTENTS                                           VARCHAR2(9)
+ LOGGING                                            VARCHAR2(9)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ EXTENT_MANAGEMENT                                  VARCHAR2(10)
+ ALLOCATION_TYPE                                    VARCHAR2(9)
+ PLUGGED_IN                                         VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                           VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                VARCHAR2(8)
+ RETENTION                                          VARCHAR2(11)
+ BIGFILE                                            VARCHAR2(3)
+ PREDICATE_EVALUATION                               VARCHAR2(7)
+ ENCRYPTED                                          VARCHAR2(3)
+ COMPRESS_FOR                                       VARCHAR2(12)
+
+SYS@orcl> select  TABLESPACE_NAME, BLOCK_SIZE
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                BLOCK_SIZE
+------------------------------ ----------
+SYSTEM                               8192
+SYSAUX                               8192
+UNDOTBS1                             8192
+TEMP                                 8192
+USERS                                8192
+EXAMPLE                              8192
+
+6 rows selected.
+
+SYS@orcl> CREATE SMALLFILE TABLESPACE "INVENTORY" DATAFILE '/u02/oradata/orcl/inventory01.dbf' SIZE 50M 
+AUTOEXTEND ON NEXT 10M MAXSIZE 100M LOGGING EXTENT MANAGEMENT LOCAL SEGMENT SPACE MANAGEMENT AUTO;
+
+Tablespace created.
+
+SYS@orcl> desc dba_data_files
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME                                          VARCHAR2(513)
+ FILE_ID                                            NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ STATUS                                             VARCHAR2(9)
+ RELATIVE_FNO                                       NUMBER
+ AUTOEXTENSIBLE                                     VARCHAR2(3)
+ MAXBYTES                                           NUMBER
+ MAXBLOCKS                                          NUMBER
+ INCREMENT_BY                                       NUMBER
+ USER_BYTES                                         NUMBER
+ USER_BLOCKS                                        NUMBER
+ ONLINE_STATUS                                      VARCHAR2(7)
+
+SYS@orcl> select FILE_ID, TABLESPACE_NAME, FILE_NAME, AUTOEXTENSIBLE
+  2  from dba_data_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+         4 USERS
+/u02/oradata/orcl/users01.dbf
+YES
+
+         3 UNDOTBS1
+/u02/oradata/orcl/undotbs01.dbf
+YES
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+
+         2 SYSAUX
+/u02/oradata/orcl/sysaux01.dbf
+YES
+
+         1 SYSTEM
+/u02/oradata/orcl/system01.dbf
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+YES
+
+         5 EXAMPLE
+/u02/oradata/orcl/example01.dbf
+YES
+
+         6 INVENTORY
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+/u02/oradata/orcl/inventory01.dbf
+YES
+
+
+6 rows selected.
+
+SYS@orcl>
+SYS@orcl>
+SYS@orcl> create tablespace sample
+  2  datafile '/u02/oradata/orcl/sample01.dbf' size 10m
+  3  autoextend on next 10m maxsize 50m;
+
+Tablespace created.
+
+SYS@orcl> select file_id, tablespace_name,file_name, AUTOEXTENSIBLE
+  2  from dba_data_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+         4 USERS
+/u02/oradata/orcl/users01.dbf
+YES
+
+         3 UNDOTBS1
+/u02/oradata/orcl/undotbs01.dbf
+YES
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+
+         2 SYSAUX
+/u02/oradata/orcl/sysaux01.dbf
+YES
+
+         1 SYSTEM
+/u02/oradata/orcl/system01.dbf
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+YES
+
+         5 EXAMPLE
+/u02/oradata/orcl/example01.dbf
+YES
+
+         6 INVENTORY
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+/u02/oradata/orcl/inventory01.dbf
+YES
+
+         7 SAMPLE
+/u02/oradata/orcl/sample01.dbf
+YES
+
+
+7 rows selected.
+
+SYS@orcl> desc dba_tablespaces
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                NOT NULL NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                               NOT NULL NUMBER
+ MAX_EXTENTS                                        NUMBER
+ MAX_SIZE                                           NUMBER
+ PCT_INCREASE                                       NUMBER
+ MIN_EXTLEN                                         NUMBER
+ STATUS                                             VARCHAR2(9)
+ CONTENTS                                           VARCHAR2(9)
+ LOGGING                                            VARCHAR2(9)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ EXTENT_MANAGEMENT                                  VARCHAR2(10)
+ ALLOCATION_TYPE                                    VARCHAR2(9)
+ PLUGGED_IN                                         VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                           VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                VARCHAR2(8)
+ RETENTION                                          VARCHAR2(11)
+ BIGFILE                                            VARCHAR2(3)
+ PREDICATE_EVALUATION                               VARCHAR2(7)
+ ENCRYPTED                                          VARCHAR2(3)
+ COMPRESS_FOR                                       VARCHAR2(12)
+
+SYS@orcl> select TABLESPACE_NAME,INITIAL_EXTENT,CONTENTS , ALLOCATION_TYPE
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                INITIAL_EXTENT CONTENTS  ALLOCATIO
+------------------------------ -------------- --------- ---------
+SYSTEM                                  65536 PERMANENT SYSTEM
+SYSAUX                                  65536 PERMANENT SYSTEM
+UNDOTBS1                                65536 UNDO      SYSTEM
+TEMP                                  1048576 TEMPORARY UNIFORM
+USERS                                   65536 PERMANENT SYSTEM
+EXAMPLE                                 65536 PERMANENT SYSTEM
+INVENTORY                               65536 PERMANENT SYSTEM
+SAMPLE                                  65536 PERMANENT SYSTEM
+
+8 rows selected.
+
+SYS@orcl> alter user hr
+  2  quota unlimited on inventory;
+
+User altered.
+
+SYS@orcl> alter user hr
+  2   quota unlimited on sample;
+
+User altered.
+
+SYS@orcl> create table hr.emp3 tablespace inventory
+  2  as select * from hr.employees;
+
+Table created.
+
+HR@orcl> conn /as sysdba
+Connected.
+SYS@orcl> alter tablespace inventory
+  2  add datafile '/u02/oradata/orcl/inventory02.dbf' size 500m;
+
+Tablespace altered.
+
+SYS@orcl> select file_id, tablespace_name,file_name, AUTOEXTENSIBLE
+  2  from dba_data_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+         4 USERS
+/u02/oradata/orcl/users01.dbf
+YES
+
+         3 UNDOTBS1
+/u02/oradata/orcl/undotbs01.dbf
+YES
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+
+         2 SYSAUX
+/u02/oradata/orcl/sysaux01.dbf
+YES
+
+         1 SYSTEM
+/u02/oradata/orcl/system01.dbf
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+YES
+
+         5 EXAMPLE
+/u02/oradata/orcl/example01.dbf
+YES
+
+         6 INVENTORY
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+/u02/oradata/orcl/inventory01.dbf
+YES
+
+         7 SAMPLE
+/u02/oradata/orcl/sample01.dbf
+YES
+
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+         8 INVENTORY
+/u02/oradata/orcl/inventory02.dbf
+NO
+
+
+8 rows selected.
+
+SYS@orcl> 1  select file_id, tablespace_name,file_name, AUTOEXTENSIBLE
+  2  from dba_data_files
+  3 where tablespace_name = 'INVENTORY';
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+         6 INVENTORY
+/u02/oradata/orcl/inventory01.dbf
+YES
+
+         8 INVENTORY
+/u02/oradata/orcl/inventory02.dbf
+NO
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+AUT
+---
+
+
+SYS@orcl> insert into hr.emp3 select * from hr.emp3;
+
+107 rows created.
+
+SYS@orcl> /
+
+214 rows created.
+
+SYS@orcl> /
+
+428 rows created.
+
+SYS@orcl> /
+
+856 rows created.
+
+SYS@orcl> /
+
+1712 rows created.
+
+SYS@orcl> /
+
+3424 rows created.
+
+SYS@orcl> /
+
+6848 rows created.
+
+SYS@orcl> /
+
+13696 rows created.
+
+SYS@orcl> /
+
+27392 rows created.
+
+SYS@orcl> /
+
+54784 rows created.
+
+SYS@orcl> /
+
+109568 rows created.
+
+SYS@orcl> /
+
+219136 rows created.
+
+SYS@orcl> /
+
+438272 rows created.
+
+SYS@orcl> /
+
+876544 rows created.
+
+SYS@orcl> /
+
+1753088 rows created.
+
+SYS@orcl> /
+
+3506176 rows created.
+
+SYS@orcl> select count(*) from hr.emp3;
+
+  COUNT(*)
+----------
+   7012352
+
+
+SYS@orcl>  create temporary tablespace utemp
+  2  tempfile '/u02/oradata/orcl/utemp01.tmp' size 200m;
+
+Tablespace created.
+
+SYS@orcl> desc dba_temp_files
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME                                          VARCHAR2(513)
+ FILE_ID                                            NUMBER
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ STATUS                                             VARCHAR2(7)
+ RELATIVE_FNO                                       NUMBER
+ AUTOEXTENSIBLE                                     VARCHAR2(3)
+ MAXBYTES                                           NUMBER
+ MAXBLOCKS                                          NUMBER
+ INCREMENT_BY                                       NUMBER
+ USER_BYTES                                         NUMBER
+ USER_BLOCKS                                        NUMBER
+
+SYS@orcl> select FILE_ID,TABLESPACE_NAME,FILE_NAME
+  2  from dba_temp_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+         1 TEMP
+/u02/oradata/orcl/temp01.dbf
+
+         2 UTEMP
+/u02/oradata/orcl/utemp01.tmp
+
+
+SYS@orcl>
+SYS@orcl> desc dba_tablespaces
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                NOT NULL NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                               NOT NULL NUMBER
+ MAX_EXTENTS                                        NUMBER
+ MAX_SIZE                                           NUMBER
+ PCT_INCREASE                                       NUMBER
+ MIN_EXTLEN                                         NUMBER
+ STATUS                                             VARCHAR2(9)
+ CONTENTS                                           VARCHAR2(9)
+ LOGGING                                            VARCHAR2(9)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ EXTENT_MANAGEMENT                                  VARCHAR2(10)
+ ALLOCATION_TYPE                                    VARCHAR2(9)
+ PLUGGED_IN                                         VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                           VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                VARCHAR2(8)
+ RETENTION                                          VARCHAR2(11)
+ BIGFILE                                            VARCHAR2(3)
+ PREDICATE_EVALUATION                               VARCHAR2(7)
+ ENCRYPTED                                          VARCHAR2(3)
+ COMPRESS_FOR                                       VARCHAR2(12)
+
+SYS@orcl> select TABLESPACE_NAME ,CONTENTS
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                CONTENTS
+------------------------------ ---------
+SYSTEM                         PERMANENT
+SYSAUX                         PERMANENT
+UNDOTBS1                       UNDO
+TEMP                           TEMPORARY
+USERS                          PERMANENT
+EXAMPLE                        PERMANENT
+INVENTORY                      PERMANENT
+SAMPLE                         PERMANENT
+UTEMP                          TEMPORARY
+
+9 rows selected.
+
+SYS@orcl> create table utp tablespace temp
+  2  as select * from dba_objects;
+as select * from dba_objects
+                 *
+ERROR at line 2:
+ORA-02195: Attempt to create PERMANENT object in a TEMPORARY tablespace
+
+
+SYS@orcl> alter tablespace inventory read only;
+
+Tablespace altered.
+
+SYS@orcl> select TABLESPACE_NAME,STATUS
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                STATUS
+------------------------------ ---------
+SYSTEM                         ONLINE
+SYSAUX                         ONLINE
+UNDOTBS1                       ONLINE
+TEMP                           ONLINE
+USERS                          ONLINE
+EXAMPLE                        ONLINE
+INVENTORY                      READ ONLY
+SAMPLE                         ONLINE
+UTEMP                          ONLINE
+
+9 rows selected.
+
+SYS@orcl> update hr.emp3
+  2  set salary=10000;
+update hr.emp3
+          *
+ERROR at line 1:
+ORA-00372: file 6 cannot be modified at this time
+ORA-01110: data file 6: '/u02/oradata/orcl/inventory01.dbf'
+
+
+SYS@orcl> select count(*) from hr.emp3;
+
+  COUNT(*)
+----------
+   7012352
+
+SYS@orcl> drop tablespace inventory including contents and datafiles;
+
+Tablespace dropped.
+
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  redo02.log    sysaux01.dbf  undotbs01.dbf
+example01.dbf  redo03.log    system01.dbf  users01.dbf
+redo01.log     sample01.dbf  temp01.dbf    utemp01.tmp
+
+SYS@orcl> alter tablespace sample offline immediate;
+alter tablespace sample offline immediate
+*
+ERROR at line 1:
+ORA-01145: offline immediate disallowed unless media recovery enabled
+
+
+SYS@orcl> alter tablespace sample offline;
+
+Tablespace altered.
+
+SYS@orcl> select tablespace_name, status
+  2  from dba_tablespaces;
+
+TABLESPACE_NAME                STATUS
+------------------------------ ---------
+SYSTEM                         ONLINE
+SYSAUX                         ONLINE
+UNDOTBS1                       ONLINE
+TEMP                           ONLINE
+USERS                          ONLINE
+EXAMPLE                        ONLINE
+SAMPLE                         OFFLINE
+UTEMP                          ONLINE
+
+8 rows selected.
+
+SYS@orcl> alter tablespace system read only;
+alter tablespace system read only
+*
+ERROR at line 1:
+ORA-01643: system tablespace can not be made read-only
+
+
+SYS@orcl> alter tablespace system offline;
+alter tablespace system offline
+*
+ERROR at line 1:
+ORA-01541: system tablespace cannot be brought offline; shut down if necessary
+
+
+SYS@orcl>
+SYS@orcl>
+SYS@orcl>
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  redo02.log    sysaux01.dbf  undotbs01.dbf
+example01.dbf  redo03.log    system01.dbf  users01.dbf
+redo01.log     sample01.dbf  temp01.dbf    utemp01.tmp
+
+SYS@orcl> drop tablespace sample;
+
+Tablespace dropped.
+
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  redo02.log    sysaux01.dbf  undotbs01.dbf
+example01.dbf  redo03.log    system01.dbf  users01.dbf
+redo01.log     sample01.dbf  temp01.dbf    utemp01.tmp
+
+SYS@orcl> !rm /u02/oradata/orcl/sample01.dbf
+
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  redo02.log    system01.dbf   users01.dbf
+example01.dbf  redo03.log    temp01.dbf     utemp01.tmp
+redo01.log     sysaux01.dbf  undotbs01.dbf
+
+SYS@orcl>
+SYS@orcl>
+SYS@orcl>
+SYS@orcl>
+SYS@orcl> desc v$tempfile
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE#                                              NUMBER
+ CREATION_CHANGE#                                   NUMBER
+ CREATION_TIME                                      DATE
+ TS#                                                NUMBER
+ RFILE#                                             NUMBER
+ STATUS                                             VARCHAR2(7)
+ ENABLED                                            VARCHAR2(10)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ CREATE_BYTES                                       NUMBER
+ BLOCK_SIZE                                         NUMBER
+ NAME                                               VARCHAR2(513)
+
+SYS@orcl> select FILE#,TS#,STATUS ,NAME
+  2  from v$tempfile;
+
+     FILE#        TS# STATUS
+---------- ---------- -------
+NAME
+--------------------------------------------------------------------------------
+         1          3 ONLINE
+/u02/oradata/orcl/temp01.dbf
+
+         2          9 ONLINE
+/u02/oradata/orcl/utemp01.tmp
+
+
+SYS@orcl>
+SYS@orcl> desc dba_tablespaces
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TABLESPACE_NAME                           NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                NOT NULL NUMBER
+ INITIAL_EXTENT                                     NUMBER
+ NEXT_EXTENT                                        NUMBER
+ MIN_EXTENTS                               NOT NULL NUMBER
+ MAX_EXTENTS                                        NUMBER
+ MAX_SIZE                                           NUMBER
+ PCT_INCREASE                                       NUMBER
+ MIN_EXTLEN                                         NUMBER
+ STATUS                                             VARCHAR2(9)
+ CONTENTS                                           VARCHAR2(9)
+ LOGGING                                            VARCHAR2(9)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ EXTENT_MANAGEMENT                                  VARCHAR2(10)
+ ALLOCATION_TYPE                                    VARCHAR2(9)
+ PLUGGED_IN                                         VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                           VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                VARCHAR2(8)
+ RETENTION                                          VARCHAR2(11)
+ BIGFILE                                            VARCHAR2(3)
+ PREDICATE_EVALUATION                               VARCHAR2(7)
+ ENCRYPTED                                          VARCHAR2(3)
+ COMPRESS_FOR                                       VARCHAR2(12)
+
+SYS@orcl> desc v$tablespace
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TS#                                                NUMBER
+ NAME                                               VARCHAR2(30)
+ INCLUDED_IN_DATABASE_BACKUP                        VARCHAR2(3)
+ BIGFILE                                            VARCHAR2(3)
+ FLASHBACK_ON                                       VARCHAR2(3)
+ ENCRYPT_IN_BACKUP                                  VARCHAR2(3)
+
+SYS@orcl> select ts#,name from v$tablespace;
+
+       TS# NAME
+---------- ------------------------------
+         0 SYSTEM
+         1 SYSAUX
+         2 UNDOTBS1
+         4 USERS
+         3 TEMP
+         6 EXAMPLE
+         9 UTEMP
+
+7 rows selected.
+
+SYS@orcl>
+SYS@orcl>
+SYS@orcl> alter system set db_create_file_dest='/u02/oradata/orcl' scope=both;
+
+System altered.
+
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  redo02.log    system01.dbf   users01.dbf
+example01.dbf  redo03.log    temp01.dbf     utemp01.tmp
+redo01.log     sysaux01.dbf  undotbs01.dbf
+
+SYS@orcl> create tablespace tbs_1;
+
+Tablespace created.
+
+SYS@orcl> !ls /u02/oradata/orcl
+control01.ctl  ORCL        redo02.log  sysaux01.dbf  temp01.dbf     users01.dbf
+example01.dbf  redo01.log  redo03.log  system01.dbf  undotbs01.dbf  utemp01.tmp
+
+SYS@orcl> !ls /u02/oradata/orcl/ORCL
+datafile
+
+SYS@orcl> !ls /u02/oradata/orcl/ORCL/datafile
+o1_mf_tbs_1_nfdm9jds_.dbf
+
+SYS@orcl> !ls -al /u02/oradata/orcl/ORCL/datafile
+total 102520
+drwxr-x--- 2 oracle oinstall      4096 Sep 26 17:22 .
+drwxr-x--- 3 oracle oinstall      4096 Sep 26 17:22 ..
+-rw-r----- 1 oracle oinstall 104865792 Sep 26 17:22 o1_mf_tbs_1_nfdm9jds_.dbf
+
+SYS@orcl> desc dba_data_files
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME                                          VARCHAR2(513)
+ FILE_ID                                            NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ STATUS                                             VARCHAR2(9)
+ RELATIVE_FNO                                       NUMBER
+ AUTOEXTENSIBLE                                     VARCHAR2(3)
+ MAXBYTES                                           NUMBER
+ MAXBLOCKS                                          NUMBER
+ INCREMENT_BY                                       NUMBER
+ USER_BYTES                                         NUMBER
+ USER_BLOCKS                                        NUMBER
+ ONLINE_STATUS                                      VARCHAR2(7)
+
+SYS@orcl> select FILE_ID,TABLESPACE_NAME ,FILE_NAME,BYTES
+  2  from dba_data_files;
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+         4 USERS
+/u02/oradata/orcl/users01.dbf
+  13107200
+
+         3 UNDOTBS1
+/u02/oradata/orcl/undotbs01.dbf
+ 104857600
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+
+         2 SYSAUX
+/u02/oradata/orcl/sysaux01.dbf
+ 618659840
+
+         1 SYSTEM
+/u02/oradata/orcl/system01.dbf
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+ 996147200
+
+         5 EXAMPLE
+/u02/oradata/orcl/example01.dbf
+ 104857600
+
+         6 TBS_1
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+/u02/oradata/orcl/ORCL/datafile/o1_mf_tbs_1_nfdm9jds_.dbf
+ 104857600
+
+
+6 rows selected.
+
+SYS@orcl> alter tablespace tbs_1 add datafile size 50m;
+
+Tablespace altered.
+
+SYS@orcl>  select FILE_ID,TABLESPACE_NAME ,FILE_NAME,BYTES
+  2  from dba_data_files
+  3  where tablespace_name = 'TBS_1';
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+         6 TBS_1
+/u02/oradata/orcl/ORCL/datafile/o1_mf_tbs_1_nfdm9jds_.dbf
+ 104857600
+
+         7 TBS_1
+/u02/oradata/orcl/ORCL/datafile/o1_mf_tbs_1_nfdmmbdt_.dbf
+  52428800
+
+   FILE_ID TABLESPACE_NAME
+---------- ------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+     BYTES
+----------
+
+
+SYS@orcl> !ls /u02/oradata/orcl/ORCL/datafile/
+o1_mf_tbs_1_nfdm9jds_.dbf  o1_mf_tbs_1_nfdmmbdt_.dbf
+
+SYS@orcl> drop tablespace tbs_1;
+
+Tablespace dropped.
+
+SYS@orcl> !ls /u02/oradata/orcl/ORCL/datafile/
+
+SYS@orcl>
