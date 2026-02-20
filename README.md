@@ -63,5 +63,4 @@ GUI 툴에 의존하지 않고 리눅스 환경에서 CLI 기반으로 아키텍
 
 ## 🔗 Links
 - 📝 **기술 블로그 (트러블슈팅 상세 과정):** https://nsylove97.tistory.com/
-- 💼 **LinkedIn:**
 - 📧 **Email:** nsylove97@gmail.com
