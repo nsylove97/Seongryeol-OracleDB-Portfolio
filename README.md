@@ -1,15 +1,15 @@
 # 🚀 Oracle DBA Portfolio & Practicum
 
-오라클 데이터베이스 관리자(DBA)로서의 역량을 증명하기 위한 실무 중심의 인프라 구축, 운영 및 트러블슈팅 포트폴리오입니다.
+DBA/DBE로서의 역량을 증명하기 위한 실무 중심의 인프라 구축, 운영 및 트러블슈팅 포트폴리오입니다.
 GUI 툴에 의존하지 않고 리눅스 환경에서 CLI 기반으로 아키텍처를 구성하며, 단일 인스턴스부터 고가용성(HA) 클러스터 환경까지 단계별로 실습한 스크립트와 가이드를 기록했습니다.
 
 <br/>
 
 ## 🛠️ Tech Stack
 - **RDBMS:** Oracle Database 11g / 19c
-- **OS:** Linux (CentOS / Oracle Enterprise Linux)
+- **OS:** Linux (Oracle Linux)
 - **Languages:** SQL, PL/SQL, Shell Script
-- **Tools:** SQL*Plus, RMAN, Data Pump, AWR, OEM
+- **Tools:** SQL*Plus, RMAN, Data Pump, AWR
 
 <br/>
 
