@@ -358,8 +358,7 @@ SELECT FILE#, NAME FROM V$DATAFILE WHERE NAME LIKE '%users%';
 */
 
 -- 3-6. OPEN 단계
-
--- 처음부터 한 번에 OPEN까지 (가장 일반적인 기동 방법)
+-- 처음부터 한 번에 OPEN까지
 STARTUP;
 
 /*
@@ -509,7 +508,6 @@ SELECT INSTANCE_NAME, STATUS FROM V$INSTANCE;
 
 
 -- 6. SCOPE 옵션 파라미터 제어
-
 
 -- 실습 전 파라미터 현재 값 확인
 SHOW PARAMETER job_queue_processes;   -- 동적 파라미터 (실습용)
