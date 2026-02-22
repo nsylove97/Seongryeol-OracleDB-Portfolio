@@ -1,59 +1,35 @@
-# Oracle DBA Portfolio & Practicum
-
-DBA/DBE로서의 역량을 증명하기 위한 실무 중심의 인프라 구축, 운영 및 트러블슈팅 포트폴리오입니다.
-싱글 인스턴스부터 고가용성(HA) 클러스터 환경까지 단계별로 실습한 스크립트와 가이드를 기록했습니다.
+# Oracle DBA Portfolio
+DBA/DBE로서의 역량을 키우기 위한 실무 중심의 실습 포트폴리오입니다.
+기동 단계별 동작 원리부터 스토리지 구조 관리까지 단계별로 실습한 스크립트와 과정을 기록했습니다.
 
 <br/>
 
 ## Tech Stack
 - **RDBMS:** Oracle Database 19c
-- **OS:** Linux (Oracle Linux)
-- **Languages:** SQL, PL/SQL, Shell Script
-- **Tools:** SQL*Plus, RMAN, Data Pump, AWR
+- **OS:** Oracle Linux 7.9 (VMware Virtual Machine)
+- **Languages:** SQL
+- **Tools:** SQL*Plus, MobaXterm(SSH)
 
 <br/>
 
 ## 학습 및 실습 주제
 
-이 레포지토리는 오라클 데이터베이스의 핵심 관리 영역을 7개의 파트로 나누어 구성했습니다.
-각 폴더를 클릭하면 상세 스크립트 및 트러블슈팅 과정을 확인할 수 있습니다.
-
 (./01_Admin)
-- DB 수동 생성 (PFILE 작성 및 `CREATE DATABASE` 스크립트)
-- 다중 리스너 및 로컬 네이밍 네트워크 구성
-- 테이블스페이스 및 Undo / Redo Log 다중화 스토리지 관리
-
-(./02_PLSQL)
-- Procedure, Function, Package 작성 및 예외 처리
-- 커서를 활용한 대용량 데이터 처리 및 트리거를 이용한 자동화 작업
-
-(./03_Backup_Recovery)
-- RMAN을 활용한 전체/증분 백업 및 복구 구성
-- User-Managed Backup (Cold/Hot Backup) 스크립트 작성
-- Flashback을 활용한 논리적 장애 복구
-
-(./04_SQL_Tuning)
-- 옵티마이저(CBO/RBO) 이해 및 실행 계획 분석
-- Index 전략 수립 및 힌트를 활용한 최적의 액세스 경로 유도
-- AWR 리포트 추출 및 Wait Event 분석
-
-(./05_Security)
-- 유저 권한 및 Role 관리, Profile을 통한 리소스 제어
-- 표준 감사 및 FGA 구축
-- TDE를 활용한 데이터 암호화
-
-(./06_Data_Guard)
-- Primary - Standby DB 간의 데이터가드 환경 구축 (물리적/논리적)
-- Active Data Guard 구성 및 Switchover / Failover 전환 테스트
-- Redo 전송 방식(SYNC/ASYNC) 및 보호 모드(Maximum Protection 등) 설정
-
-(./07_RAC)
-- 그리드 인프라스트럭쳐 및 ASM 환경 구축
-- Oracle RAC 2-Node 설치 및 인스턴스 구성
-- Cache Fusion의 이해 및 노드 장애 시 Failover 테스트
+- SQL*Plus 로컬/클라이언트 접속 방식 비교
+- Alert Log 실시간 모니터링
+- 인스턴스 기동 4단계 (SHUTDOWN → NOMOUNT → MOUNT → OPEN) 실습
+- pfile / spfile 상호 변환 및 SCOPE 옵션 파라미터 제어
+- SHUTDOWN ABORT 후 Instance Recovery 확인
+- 백그라운드 프로세스 강제 종료 및 크래시 복구
+- Permanent / Temporary Tablespace 생성 및 관리
+- 데이터파일 추가/삭제, 용량 부족 상황 재현 및 확장
+- Tablespace OFFLINE / READ ONLY 전환 실습
+- OMF (Oracle-Managed Files) 설정 및 자동 파일 관리
 
 <br/>
 
 ## 🔗 Links
 - 📝 **기술 블로그:** https://nsylove97.tistory.com/
+  - [Admin 실습 01: 인스턴스 기동 & 파라미터 파일](https://nsylove97.tistory.com/13)
+  - [Admin 실습 02: 테이블스페이스](https://nsylove97.tistory.com/14)
 - 📧 **Email:** nsylove97@gmail.com
