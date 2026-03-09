@@ -17,16 +17,22 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 ## 학습 및 실습 주제
 
 (./01_Admin)
+
+**Admin 실습 01: 인스턴스 기동 & 파라미터 파일**
 - SQL*Plus 로컬/클라이언트 접속 방식 비교
 - Alert Log 실시간 모니터링
 - 인스턴스 기동 4단계 (SHUTDOWN → NOMOUNT → MOUNT → OPEN) 실습
 - pfile / spfile 상호 변환 및 SCOPE 옵션 파라미터 제어
 - SHUTDOWN ABORT 후 Instance Recovery 확인
 - 백그라운드 프로세스 강제 종료 및 크래시 복구
+
+**Admin 실습 02: 테이블스페이스**
 - Permanent / Temporary Tablespace 생성 및 관리
 - 데이터파일 추가/삭제, 용량 부족 상황 재현 및 확장
 - Tablespace OFFLINE / READ ONLY 전환 실습
 - OMF (Oracle-Managed Files) 설정 및 자동 파일 관리
+
+**Admin 실습 03: DB 수동 생성 & 네트워크 구성, DB 링크**
 - 새 OS 계정(produser) 생성 및 환경변수 분리 구성
 - DB 수동 생성 (pfile 작성 → STARTUP NOMOUNT → CREATE DATABASE)
 - 데이터 딕셔너리 및 SQL*Plus 환경 초기화 (catalog / catproc / pupbld)
@@ -35,6 +41,8 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 - Easy Connect vs Local Naming 비교 실습
 - Database Link 생성 및 원격 테이블 조회
 - Synonym을 활용한 원격 객체 접근 단순화
+
+**Admin 실습 04: 사용자 관리 & 권한 / 롤 / 프로파일**
 - Predefined 계정 구조 및 Administrator Authentication (OS 인증 / 패스워드 파일 인증)
 - External Authentication (OPS$ 방식, OS 계정으로 DB 접속)
 - 계정 잠금 해제 및 비밀번호 초기화 (LOCKED / EXPIRED & LOCKED 상태 처리)
@@ -43,6 +51,8 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 - 롤(Role) 생성 및 권한 묶음 관리 (롤 중첩, 활성화 규칙)
 - 프로파일(Profile) 생성 및 비밀번호 정책 적용 (잠금 횟수, 만료, 재사용 제한)
 - 쿼타(Quota) 설정 및 테이블스페이스 사용 한도 관리
+
+**Admin 실습 05: Lock & Undo & 감사(Audit)**
 - Lock 구조 이해 및 블로킹 세션 조회 & Kill Session 실습
 - Deadlock 재현 및 오라클 자동 해제 확인
 - Undo Data 개념 (Active / Unexpired / Expired 상태)
