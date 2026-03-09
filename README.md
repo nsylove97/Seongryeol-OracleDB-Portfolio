@@ -1,4 +1,4 @@
-# Oracle DBA Portfolio
+# Oracle DB Portfolio
 
 Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성, 네트워크 구성,
 사용자 보안 관리, Lock & Undo & 감사(Audit)까지 CLI 환경에서 직접 실습한 포트폴리오입니다.
