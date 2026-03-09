@@ -1,8 +1,8 @@
 # Oracle DB Portfolio
 
 Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성, 네트워크 구성,
-사용자 보안 관리, Lock & Undo & 감사(Audit)까지 CLI 환경에서 직접 실습한 포트폴리오입니다.
-이후 성능 모니터링, 백업/복구, SQL 튜닝, RAC 및 Data Guard를 활용한 고가용성(HA) 구성까지 확장 예정입니다.
+사용자 보안 관리, Lock & Undo & 감사(Audit), 성능 모니터링(AWR)까지 CLI 환경에서 직접 실습한 포트폴리오입니다.
+이후 백업/복구(RMAN), SQL 튜닝, RAC 및 Data Guard를 활용한 고가용성(HA) 구성까지 확장 예정입니다.
 
 <br/>
 
@@ -63,6 +63,17 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 - SYSDBA Auditing (audit_sys_operations, OS 파일 별도 기록)
 - AUD$ / FGA_LOG$ 감사 전용 테이블스페이스 이동 (DBMS_AUDIT_MGMT)
 
+**Admin 실습 06: 성능 모니터링 & AWR, Resumable**
+- Database Maintenance 개요 (AWR / Advisors / Automated Tasks / ADR)
+- 성능 저하 원인 분류 및 Top Sessions 조회 (v$sess_time_model)
+- 오라클 메모리 관리 방식 비교 (AMM / ASMM / 수동)
+- Memory Advisor로 메모리 크기 변경 효과 사전 예측 (v$memory_target_advice)
+- AWR 스냅샷 수동 생성, 보관 기간 변경, 베이스라인 생성 (DBMS_WORKLOAD_REPOSITORY)
+- AWR 리포트 생성 (awrrpt.sql) 및 특정 SQL AWR 히스토리 조회 (dba_hist_sqlstat)
+- ADDM 분석 결과 및 권고 내용 조회 (dba_advisor_findings)
+- 통계 정보 수동 갱신 전/후 실행 계획 비교 (DBMS_STATS)
+- Resumable Space Allocation — 소용량 테이블스페이스에서 공간 부족 재현, 일시 정지 및 자동 재개
+
 <br/>
 
 ## 🔗 Links
@@ -72,4 +83,5 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
   - [Admin 실습 03: DB 수동 생성 & 네트워크 구성, DB 링크](https://nsylove97.tistory.com/32)
   - [Admin 실습 04: 사용자 관리 & 권한 / 롤 / 프로파일](https://nsylove97.tistory.com/33)
   - [Admin 실습 05: Lock & Undo & 감사(Audit)](https://nsylove97.tistory.com/34)
+  - [Admin 실습 06: 성능 모니터링 & AWR, Resumable](https://nsylove97.tistory.com/35)
 - 📧 **Email:** nsylove97@gmail.com
