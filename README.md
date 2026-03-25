@@ -76,6 +76,30 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 
 <br/>
 
+(./02_ASM)
+
+**ASM 실습 01: ASM 설치 (RAC·DG 대비 포함)**
+- VMware VM 사양 설정 및 공유 디스크 11개 추가 (Thick Provision, SCSI 컨트롤러 분리)
+- 디스크 그룹 설계 — +DATA(4개) / +FRA(2개) / +REDO(2개) / +OCR(3개)
+- 디스크 파티션 생성 및 Oracle ASM Library(ASMLib) 설치
+- OS 계정(grid / oracle) 생성 및 Role Separation 적용 (asmadmin / asmdba / asmoper 그룹)
+- hosts 파일 등록 (Public / VIP / Private / SCAN 대역 사전 정의)
+- OS Kernel Parameter & Resource Limit 설정
+- ASM 디스크 설정 (oracleasm configure / init / createdisk)
+- VM 스냅샷 촬영 및 RAC·Data Guard 대비 VM 복제 전략 (VM2 공유 디스크 연결 / VM3 독립 복제)
+- Grid Infrastructure 설치 (gridSetup.sh → roothas.sh → asmca → netca)
+- DB 소프트웨어 설치 (runInstaller) 및 DB 생성 (dbca — ASM 스토리지, ARCHIVELOG 활성화)
+
+**ASM 실습 02: 인스턴스 구조 & 동적 성능 뷰**
+- ASM 인스턴스 구조 — SGA/PGA 차이, 데이터 접근 흐름, 백그라운드 프로세스(RBAL/ARBn/GMON/MARK)
+- ASM 권한 종류 — SYSASM / SYSDBA / SYSOPER
+- 시작·종료 순서 실습 — crsctl(CRS 데몬 레벨) / srvctl(서비스 단위)
+- 동적 성능 뷰 실습 — v$asm_diskgroup / v$asm_disk / v$asm_file
+- ASMCMD 실습 — lsdg / lsdsk(-k) / du / ls -l
+- 스트라이핑 & 미러링(EXTERNAL/NORMAL/HIGH) & Failure Group 개념 및 구성 확인
+
+<br/>
+
 ## 🔗 Links
 - 📝 **기술 블로그:** https://nsylove97.tistory.com/
   - [Admin 실습 01: 인스턴스 기동 & 파라미터 파일](https://nsylove97.tistory.com/13)
@@ -84,4 +108,6 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
   - [Admin 실습 04: 사용자 관리 & 권한 / 롤 / 프로파일](https://nsylove97.tistory.com/33)
   - [Admin 실습 05: Lock & Undo & 감사(Audit)](https://nsylove97.tistory.com/34)
   - [Admin 실습 06: 성능 모니터링 & AWR, Resumable](https://nsylove97.tistory.com/35)
+  - [ASM 실습 01: ASM 설치 (RAC·DG 대비 포함)](https://nsylove97.tistory.com/39)
+  - [ASM 실습 02: 인스턴스 구조 & 동적 성능 뷰](https://nsylove97.tistory.com/40)
 - 📧 **Email:** nsylove97@gmail.com
