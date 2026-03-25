@@ -621,7 +621,7 @@ CREATE TABLESPACE tbs_manual
 */
 
 -- OMF 적용 상태 (현재 환경): 경로 생략 가능 → 시스템이 이름 자동 부여
-CREATE TABLESPACE tbs_omf SIZE 10M;
+CREATE TABLESPACE tbs_omf;
 
 /*
  [결과]
