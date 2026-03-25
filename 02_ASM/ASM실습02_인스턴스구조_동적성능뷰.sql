@@ -549,3 +549,4 @@ ORDER  BY dg.name, dk.failgroup, dk.disk_number;
                             → DATA/FRA/REDO: 2개 FG / OCR: 3개 FG (쿼럼 요건)
 
    ============================================================================ */
+   
