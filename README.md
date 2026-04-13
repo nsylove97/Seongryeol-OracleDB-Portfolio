@@ -4,7 +4,7 @@ Oracle DB 인스턴스 기동 원리부터 스토리지 관리, 수동 DB 생성
 사용자 보안 관리, Lock & Undo & 감사(Audit), 성능 모니터링(AWR),
 ASM(Automatic Storage Management) 설치 및 인스턴스 구조까지 CLI 환경에서 직접 실습한 포트폴리오입니다.
 현재 Data Guard를 활용한 고가용성(HA) / 재해 복구(DR) 구성을 진행 중이며,
-이후 RMAN 백업·복구, SQL 튜닝, RAC 구성까지 확장 예정입니다.
+이후 RAC 구성, RMAN 백업·복구, SQL 튜닝까지 확장 예정입니다.
 
 <br/>
 
