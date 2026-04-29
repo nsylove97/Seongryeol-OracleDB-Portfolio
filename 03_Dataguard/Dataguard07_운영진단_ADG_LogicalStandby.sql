@@ -1061,18 +1061,19 @@ ALTER DATABASE STOP LOGICAL STANDBY APPLY;
 */
 
 -- [VM3 — SYSDBA] db_name을 Primary와 동일한 'orcl'로 원상복구
-ALTER SYSTEM SET db_name = 'orcl' SCOPE=SPFILE;
-
-/*
- [결과]
-   System altered.
-*/
-
-SHUTDOWN IMMEDIATE;
+--PFILE 이용해서 SPFILE 생성
+SHUTDOWN ABORT;
 
 /*
  [결과]
    Oracle instance shut down.
+*/
+
+CREATE SPFILE FROM PFILE;
+
+/*
+ [결과]
+   File created.
 */
 
 STARTUP NOMOUNT;
